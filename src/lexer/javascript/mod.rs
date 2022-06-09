@@ -6,9 +6,11 @@ use super::{
 
 #[derive(Debug, PartialEq)]
 pub enum JavaScriptTokenKind {
+  Boolean,
   Comment,
   Identifier,
   Keyword,
+  Null,
   String,
 }
 
@@ -72,7 +74,41 @@ fn read_next_token(lexer: &mut Lexer) -> Option<Token> {
   let next_char = lexer.input.get(lexer.current_position)?;
 
   if next_char.is_alphabetic() {
-    return Some(read_identifier_or_keyword(lexer));
+    let mut next_token = String::from("");
+    let start_position = lexer.current_position;
+
+    while let Some(next_char) = lexer.input.get(lexer.current_position) {
+      if next_char.is_whitespace() || next_char == &';' {
+        break;
+      } else {
+        next_token.push(*next_char);
+        lexer.current_position += 1;
+      }
+    }
+
+    let span = Span::new(start_position, lexer.current_position - 1);
+
+    if next_token == "true" || next_token == "false" {
+      return Some(Token::new(
+        TokenKind::JavaScript(JavaScriptTokenKind::Boolean),
+        span,
+      ));
+    } else if next_token == "null" {
+      return Some(Token::new(
+        TokenKind::JavaScript(JavaScriptTokenKind::Null),
+        span,
+      ));
+    } else if KEYWORDS.contains(&next_token.as_str()) {
+      return Some(Token::new(
+        TokenKind::JavaScript(JavaScriptTokenKind::Keyword),
+        span,
+      ));
+    } else {
+      return Some(Token::new(
+        TokenKind::JavaScript(JavaScriptTokenKind::Identifier),
+        span,
+      ));
+    }
   } else if next_char == &'/' {
     let second_char = *lexer.input.get(lexer.current_position + 1)?;
 
@@ -98,28 +134,6 @@ fn progress_to_non_whitespace(lexer: &mut Lexer) {
     } else {
       break;
     }
-  }
-}
-
-fn read_identifier_or_keyword(lexer: &mut Lexer) -> Token {
-  let mut next_token = String::from("");
-  let start_position = lexer.current_position;
-
-  while let Some(next_char) = lexer.input.get(lexer.current_position) {
-    if next_char.is_whitespace() || next_char == &';' {
-      break;
-    } else {
-      next_token.push(*next_char);
-      lexer.current_position += 1;
-    }
-  }
-
-  let span = Span::new(start_position, lexer.current_position - 1);
-
-  if KEYWORDS.contains(&next_token.as_str()) {
-    return Token::new(TokenKind::JavaScript(JavaScriptTokenKind::Keyword), span);
-  } else {
-    return Token::new(TokenKind::JavaScript(JavaScriptTokenKind::Identifier), span);
   }
 }
 

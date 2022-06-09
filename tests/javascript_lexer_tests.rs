@@ -284,4 +284,52 @@ mod javascript_lexer_tests {
 
     assert_eq!(*lexer.get_tokens(), expected);
   }
+
+  #[test]
+  fn lexer_parses_boolean_literal() {
+    let input = String::from("let myVar = false;");
+    let expected = vec![
+      Token::new(
+        TokenKind::JavaScript(JavaScriptTokenKind::Keyword),
+        Span::new(0, 2),
+      ),
+      Token::new(
+        TokenKind::JavaScript(JavaScriptTokenKind::Identifier),
+        Span::new(4, 8),
+      ),
+      Token::new(
+        TokenKind::JavaScript(JavaScriptTokenKind::Boolean),
+        Span::new(12, 16),
+      ),
+    ];
+
+    let mut lexer = Lexer::new(input);
+    lexer.process_input(Language::JavaScript);
+
+    assert_eq!(*lexer.get_tokens(), expected);
+  }
+
+  #[test]
+  fn lexer_parses_null_literal() {
+    let input = String::from("let myVar = null;");
+    let expected = vec![
+      Token::new(
+        TokenKind::JavaScript(JavaScriptTokenKind::Keyword),
+        Span::new(0, 2),
+      ),
+      Token::new(
+        TokenKind::JavaScript(JavaScriptTokenKind::Identifier),
+        Span::new(4, 8),
+      ),
+      Token::new(
+        TokenKind::JavaScript(JavaScriptTokenKind::Null),
+        Span::new(12, 15),
+      ),
+    ];
+
+    let mut lexer = Lexer::new(input);
+    lexer.process_input(Language::JavaScript);
+
+    assert_eq!(*lexer.get_tokens(), expected);
+  }
 }
