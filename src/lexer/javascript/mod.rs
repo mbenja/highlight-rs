@@ -9,6 +9,7 @@ pub enum JavaScriptTokenKind {
   Comment,
   Identifier,
   Keyword,
+  String,
 }
 
 const KEYWORDS: [&str; 43] = [
@@ -80,6 +81,8 @@ fn read_next_token(lexer: &mut Lexer) -> Option<Token> {
     } else {
       return Some(read_single_line_comment(lexer));
     }
+  } else if next_char == &'"' || next_char == &'\'' || next_char == &'`' {
+    return read_string_literal(lexer);
   } else {
     lexer.current_position += 1;
   }
@@ -155,4 +158,23 @@ fn read_multi_line_comment(lexer: &mut Lexer) -> Token {
     TokenKind::JavaScript(JavaScriptTokenKind::Comment),
     Span::new(start_position, lexer.current_position - 1),
   )
+}
+
+fn read_string_literal(lexer: &mut Lexer) -> Option<Token> {
+  let start_position = lexer.current_position;
+  let wrapping_character = lexer.input.get(lexer.current_position)?;
+  lexer.current_position += 1;
+
+  while let Some(next_char) = lexer.input.get(lexer.current_position) {
+    lexer.current_position += 1;
+
+    if next_char == wrapping_character {
+      break;
+    }
+  }
+
+  Some(Token::new(
+    TokenKind::JavaScript(JavaScriptTokenKind::String),
+    Span::new(start_position, lexer.current_position - 1),
+  ))
 }
