@@ -129,6 +129,9 @@ fn read_next_token(lexer: &mut Lexer) -> Option<Token> {
     }
   } else if next_char == &'"' || next_char == &'\'' || next_char == &'`' {
     return read_string_literal(lexer);
+  } else if next_char == &'[' {
+    lexer.current_position += 1;
+    return read_next_token(lexer);
   } else {
     lexer.current_position += 1;
   }
@@ -224,7 +227,7 @@ fn read_numeric_literal(lexer: &mut Lexer) -> Option<Token> {
   let mut is_float = false;
 
   while let Some(next_char) = lexer.input.get(lexer.current_position) {
-    if next_char.is_whitespace() || next_char == &';' {
+    if next_char.is_whitespace() || next_char == &';' || next_char == &',' || next_char == &']' {
       break;
     }
 

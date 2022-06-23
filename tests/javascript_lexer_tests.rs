@@ -969,4 +969,32 @@ mod javascript_lexer_tests {
 
     assert_eq!(*lexer.get_tokens(), expected);
   }
+
+  #[test]
+  fn lexer_parses_array() {
+    let input = String::from("let myVar = [123, 123];");
+    let expected = vec![
+      Token::new(
+        TokenKind::JavaScript(JavaScriptTokenKind::Keyword),
+        Span::new(0, 2),
+      ),
+      Token::new(
+        TokenKind::JavaScript(JavaScriptTokenKind::Identifier),
+        Span::new(4, 8),
+      ),
+      Token::new(
+        TokenKind::JavaScript(JavaScriptTokenKind::Number),
+        Span::new(13, 15),
+      ),
+      Token::new(
+        TokenKind::JavaScript(JavaScriptTokenKind::Number),
+        Span::new(18, 20),
+      ),
+    ];
+
+    let mut lexer = Lexer::new(input);
+    lexer.process_input(Language::JavaScript);
+
+    assert_eq!(*lexer.get_tokens(), expected);
+  }
 }
