@@ -73,6 +73,8 @@ pub fn lex_javascript(lexer: &mut Lexer) {
 fn read_next_token(lexer: &mut Lexer) -> Option<Token> {
   progress_to_non_whitespace(lexer);
 
+  const NON_WHITESPACE_IDENTIFIER_TERMINATORS: [char; 8] = [';', ':', '{', '}', '[', ']', '(', ')'];
+
   let next_char = lexer.input.get(lexer.current_position)?;
 
   if next_char.is_alphabetic() {
@@ -80,13 +82,7 @@ fn read_next_token(lexer: &mut Lexer) -> Option<Token> {
     let start_position = lexer.current_position;
 
     while let Some(next_char) = lexer.input.get(lexer.current_position) {
-      if next_char.is_whitespace()
-        || next_char == &';'
-        || next_char == &':'
-        || next_char == &'}'
-        || next_char == &']'
-        || next_char == &'['
-      {
+      if next_char.is_whitespace() || NON_WHITESPACE_IDENTIFIER_TERMINATORS.contains(next_char) {
         break;
       } else {
         next_token.push(*next_char);
@@ -135,7 +131,7 @@ fn read_next_token(lexer: &mut Lexer) -> Option<Token> {
     }
   } else if next_char == &'"' || next_char == &'\'' || next_char == &'`' {
     return read_string_literal(lexer);
-  } else if next_char == &'[' || next_char == &':' || next_char == &'{' {
+  } else if NON_WHITESPACE_IDENTIFIER_TERMINATORS.contains(next_char) {
     lexer.current_position += 1;
     return read_next_token(lexer);
   } else {

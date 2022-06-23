@@ -9,7 +9,7 @@ mod identifier_tests {
   };
 
   #[test]
-  fn lexer_parses_identifiers() {
+  fn lexer_parses_variable_identifier() {
     let input = String::from("let myVar;");
     let expected = vec![
       Token::new(
@@ -19,6 +19,50 @@ mod identifier_tests {
       Token::new(
         TokenKind::JavaScript(JavaScriptTokenKind::Identifier),
         Span::new(4, 8),
+      ),
+    ];
+
+    let mut lexer = Lexer::new(input);
+    lexer.process_input(Language::JavaScript);
+
+    assert_eq!(*lexer.get_tokens(), expected);
+  }
+
+  #[test]
+  fn lexer_parses_function_identifier() {
+    let input = String::from("function foo() { }");
+    let expected = vec![
+      Token::new(
+        TokenKind::JavaScript(JavaScriptTokenKind::Keyword),
+        Span::new(0, 7),
+      ),
+      Token::new(
+        TokenKind::JavaScript(JavaScriptTokenKind::Identifier),
+        Span::new(9, 11),
+      ),
+    ];
+
+    let mut lexer = Lexer::new(input);
+    lexer.process_input(Language::JavaScript);
+
+    assert_eq!(*lexer.get_tokens(), expected);
+  }
+
+  #[test]
+  fn lexer_parses_function_parameter_identifier() {
+    let input = String::from("function foo(myParam) { }");
+    let expected = vec![
+      Token::new(
+        TokenKind::JavaScript(JavaScriptTokenKind::Keyword),
+        Span::new(0, 7),
+      ),
+      Token::new(
+        TokenKind::JavaScript(JavaScriptTokenKind::Identifier),
+        Span::new(9, 11),
+      ),
+      Token::new(
+        TokenKind::JavaScript(JavaScriptTokenKind::Identifier),
+        Span::new(13, 19),
       ),
     ];
 
