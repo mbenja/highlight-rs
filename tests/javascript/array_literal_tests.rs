@@ -35,4 +35,32 @@ mod array_literal_tests {
 
     assert_eq!(*lexer.get_tokens(), expected);
   }
+
+  #[test]
+  fn lexer_parses_array_index_syntax() {
+    let input = String::from("let myVar2 = myVar[0];");
+    let expected = vec![
+      Token::new(
+        TokenKind::JavaScript(JavaScriptTokenKind::Keyword),
+        Span::new(0, 2),
+      ),
+      Token::new(
+        TokenKind::JavaScript(JavaScriptTokenKind::Identifier),
+        Span::new(4, 9),
+      ),
+      Token::new(
+        TokenKind::JavaScript(JavaScriptTokenKind::Identifier),
+        Span::new(13, 17),
+      ),
+      Token::new(
+        TokenKind::JavaScript(JavaScriptTokenKind::Number),
+        Span::new(19, 19),
+      ),
+    ];
+
+    let mut lexer = Lexer::new(input);
+    lexer.process_input(Language::JavaScript);
+
+    assert_eq!(*lexer.get_tokens(), expected);
+  }
 }

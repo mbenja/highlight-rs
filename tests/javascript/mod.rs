@@ -5,4 +5,5 @@ mod identifier_tests;
 mod keyword_tests;
 mod null_literal_tests;
 mod numeric_literal_tests;
+mod object_literal_tests;
 mod string_literal_tests;
