@@ -81,6 +81,7 @@ fn read_next_token(lexer: &mut Lexer) -> Option<Token> {
     let mut next_token = String::from("");
     let start_position = lexer.current_position;
 
+    // Read full string before processing what type of token the string maps to
     while let Some(next_char) = lexer.input.get(lexer.current_position) {
       if next_char.is_whitespace() || NON_WHITESPACE_IDENTIFIER_TERMINATORS.contains(next_char) {
         break;
@@ -93,35 +94,42 @@ fn read_next_token(lexer: &mut Lexer) -> Option<Token> {
     let span = Span::new(start_position, lexer.current_position - 1);
 
     if next_token == "true" || next_token == "false" {
+      // Boolean literal
       return Some(Token::new(
         TokenKind::JavaScript(JavaScriptTokenKind::Boolean),
         span,
       ));
     } else if next_token == "null" {
+      // Null literal
       return Some(Token::new(
         TokenKind::JavaScript(JavaScriptTokenKind::Null),
         span,
       ));
     } else if KEYWORDS.contains(&next_token.as_str()) {
+      // Keyword
       return Some(Token::new(
         TokenKind::JavaScript(JavaScriptTokenKind::Keyword),
         span,
       ));
     } else {
+      // Identifier
       return Some(Token::new(
         TokenKind::JavaScript(JavaScriptTokenKind::Identifier),
         span,
       ));
     }
   } else if next_char.is_digit(10) {
+    // Unsigned number
     return read_numeric_literal(lexer);
   } else if next_char == &'-' {
+    // Signed number
     let second_char = lexer.input.get(lexer.current_position + 1)?;
 
     if second_char.is_digit(10) {
       return read_numeric_literal(lexer);
     }
   } else if next_char == &'/' {
+    // Comment
     let second_char = lexer.input.get(lexer.current_position + 1)?;
 
     if second_char == &'*' {
@@ -130,11 +138,14 @@ fn read_next_token(lexer: &mut Lexer) -> Option<Token> {
       return Some(read_single_line_comment(lexer));
     }
   } else if next_char == &'"' || next_char == &'\'' || next_char == &'`' {
+    // String literal
     return read_string_literal(lexer);
   } else if NON_WHITESPACE_IDENTIFIER_TERMINATORS.contains(next_char) {
+    // Skip non-whitespace identifier terminator and continue reading next token
     lexer.current_position += 1;
     return read_next_token(lexer);
   } else {
+    // Skip character
     lexer.current_position += 1;
   }
 
@@ -229,7 +240,13 @@ fn read_numeric_literal(lexer: &mut Lexer) -> Option<Token> {
   let mut is_float = false;
 
   while let Some(next_char) = lexer.input.get(lexer.current_position) {
-    if next_char.is_whitespace() || next_char == &';' || next_char == &',' || next_char == &']' {
+    // Terminators
+    if next_char.is_whitespace()
+      || next_char == &';'
+      || next_char == &','
+      || next_char == &']'
+      || next_char == &'}'
+    {
       break;
     }
 
