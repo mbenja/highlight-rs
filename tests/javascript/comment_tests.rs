@@ -18,7 +18,7 @@ mod comment_tests {
       Span::new(0, 19),
     )];
 
-    let mut lexer = Lexer::new(input);
+    let mut lexer = Lexer::new(&input);
     lexer.process_input(Language::JavaScript);
 
     assert_eq!(*lexer.get_tokens(), expected);
@@ -33,7 +33,7 @@ mod comment_tests {
       Span::new(0, 37),
     )];
 
-    let mut lexer = Lexer::new(input);
+    let mut lexer = Lexer::new(&input);
     lexer.process_input(Language::JavaScript);
 
     assert_eq!(*lexer.get_tokens(), expected);

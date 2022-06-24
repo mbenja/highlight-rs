@@ -16,7 +16,7 @@ mod string_literal_tests {
       Span::new(0, 24),
     )];
 
-    let mut lexer = Lexer::new(input);
+    let mut lexer = Lexer::new(&input);
     lexer.process_input(Language::JavaScript);
 
     assert_eq!(*lexer.get_tokens(), expected);
@@ -30,7 +30,7 @@ mod string_literal_tests {
       Span::new(0, 24),
     )];
 
-    let mut lexer = Lexer::new(input);
+    let mut lexer = Lexer::new(&input);
     lexer.process_input(Language::JavaScript);
 
     assert_eq!(*lexer.get_tokens(), expected);
@@ -44,7 +44,7 @@ mod string_literal_tests {
       Span::new(0, 21),
     )];
 
-    let mut lexer = Lexer::new(input);
+    let mut lexer = Lexer::new(&input);
     lexer.process_input(Language::JavaScript);
 
     assert_eq!(*lexer.get_tokens(), expected);

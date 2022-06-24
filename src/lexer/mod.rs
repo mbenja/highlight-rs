@@ -12,7 +12,7 @@ pub struct Lexer {
 }
 
 impl Lexer {
-  pub fn new(input: String) -> Self {
+  pub fn new(input: &str) -> Self {
     Lexer {
       current_position: 0,
       input: input.chars().collect(),

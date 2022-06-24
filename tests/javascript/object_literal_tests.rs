@@ -38,7 +38,7 @@ mod object_literal_tests {
       ),
     ];
 
-    let mut lexer = Lexer::new(input);
+    let mut lexer = Lexer::new(&input);
     lexer.process_input(Language::JavaScript);
 
     assert_eq!(*lexer.get_tokens(), expected);

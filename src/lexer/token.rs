@@ -10,6 +10,14 @@ impl Token {
   pub fn new(kind: TokenKind, span: Span) -> Token {
     Token { kind, span }
   }
+
+  pub fn get_kind(&self) -> &TokenKind {
+    &self.kind
+  }
+
+  pub fn get_span(&self) -> &Span {
+    &self.span
+  }
 }
 
 #[derive(Debug, PartialEq)]
