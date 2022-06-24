@@ -2,7 +2,7 @@
 
 A syntax highlighter written in Rust. 
 
-This project was just for fun and served as a good learning experience for the Rust programming language. `highlight-rs` is not a feature complete syntax highlighter. While the project is configured to support mulitple languages, right now it only supports JavaScript.
+This project was just for fun and served as a good learning experience for the Rust programming language. `highlight-rs` is not a feature complete syntax highlighter. While the project is configured to support mulitple languages, right now it only supports (most of) JavaScript.
 
 ### Example Output
 <p align="center">
