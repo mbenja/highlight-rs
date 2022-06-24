@@ -24,7 +24,7 @@ impl Lexer {
     &self.tokens
   }
 
-  pub fn process_input(&mut self, language: Language) {
+  pub fn process_input(&mut self, language: &Language) {
     match language {
       Language::JavaScript => lex_javascript(self),
     }

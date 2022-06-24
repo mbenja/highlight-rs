@@ -4,9 +4,9 @@ use lexer::{language::Language, Lexer};
 mod html_builder;
 pub mod lexer;
 
-pub fn highlight(input: String) -> String {
+pub fn highlight(input: &str, language: Language) -> String {
   let mut lexer = Lexer::new(&input);
-  lexer.process_input(Language::JavaScript);
+  lexer.process_input(&language);
 
-  build_html(&input, lexer.get_tokens(), Language::JavaScript)
+  build_html(&input, lexer.get_tokens(), &language)
 }

@@ -4,7 +4,7 @@ use crate::lexer::{
   token::{Token, TokenKind},
 };
 
-pub fn build_html(raw_input: &str, tokens: &Vec<Token>, language: Language) -> String {
+pub fn build_html(raw_input: &str, tokens: &Vec<Token>, language: &Language) -> String {
   let mut html = format!("<pre>{}</pre>", raw_input);
   let mut insertion_offset: usize = 5;
 

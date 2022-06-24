@@ -19,7 +19,7 @@ mod comment_tests {
     )];
 
     let mut lexer = Lexer::new(&input);
-    lexer.process_input(Language::JavaScript);
+    lexer.process_input(&Language::JavaScript);
 
     assert_eq!(*lexer.get_tokens(), expected);
   }
@@ -34,7 +34,7 @@ mod comment_tests {
     )];
 
     let mut lexer = Lexer::new(&input);
-    lexer.process_input(Language::JavaScript);
+    lexer.process_input(&Language::JavaScript);
 
     assert_eq!(*lexer.get_tokens(), expected);
   }
